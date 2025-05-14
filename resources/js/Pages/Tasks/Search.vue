@@ -4,7 +4,6 @@
     import TasksSearch from '@/Components/Tasks/Search.vue';
     import TasksList from '@/Components/Tasks/List.vue';
 
-
 </script>
 <template>
     <div class="c-tasks__search">
@@ -14,8 +13,8 @@
             </template>
 
             <div class="py-12">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                    <div>
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <div class="px-8">
                         <TasksSearch>
                             <template #after>
                                 <button class="bg-green-800 text-green-300 py-3 px-4 font-bold hover:bg-green-300 hover:text-green-800"> 
@@ -25,7 +24,7 @@
                         </TasksSearch>
                     </div>
 
-                    <div>
+                    <div class="px-8">
                         <TasksList />
                     </div>
                 </div>

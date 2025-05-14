@@ -17,5 +17,10 @@
         "tailwindcss": "^3.2.1",
         "vite": "^5.0.0",
         "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "@iconify-prerendered/vue-ph": "^0.28.1714973607",
+        "@vueuse/core": "^13.1.0",
+        "pinia": "^3.0.2"
     }
 }
