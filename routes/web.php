@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\ListsController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +39,13 @@ Route::middleware('auth')->group(function () {
     Route::post('tasks', [TasksController::class,'store'])->name('tasks.store');
     Route::put('tasks', [TasksController::class,'update'])->name('tasks.update');
     Route::delete('tasks/{id}', [TasksController::class,'delete'])->name('tasks.delete');
+
+    Route::middleware('verify_task_owner')->group(function(){
+        Route::get('lists/{taskId}', [ListsController::class,'index'])->name('lists.index');
+        Route::post('lists/{taskId}', [ListsController::class,'store'])->name('lists.store');
+        Route::put('lists/{taskId}', [ListsController::class,'update'])->name('lists.update');
+        Route::delete('lists/{taskId}/{listId}', [ListsController::class,'delete'])->name('lists.delete');
+    });
 
 });
 

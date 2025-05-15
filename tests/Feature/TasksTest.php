@@ -31,7 +31,7 @@ test('creating and getting task and verify status (must be 200) and data respons
             'title' => 'Create API Rest',
             'description' => 'Create API Rest for main project',
             'warn_me' => true,
-            'starts_at' => "2025-05-15 15:00:00",
+            'starts_at' => now()->addDay(1)->toDateTimeString(),
             '_token' => csrf_token()
         ]);
         
@@ -48,7 +48,7 @@ test('creating and getting task and verify status (must be 200) and data respons
                     'title' => 'Create API Rest',
                     'description' => 'Create API Rest for main project',
                     'warn_me' => true,
-                    'starts_at' => "2025-05-15 15:00:00"
+                    'starts_at' => now()->addDay(1)->toDateTimeString()
                 ],
             ]
          ]);
@@ -67,7 +67,7 @@ test('creating and updating task and verify status (must be 201 for create and 2
              'title' => 'Create API Rest',
              'description' => 'Create API Rest for main project',
              'warn_me' => true,
-             'starts_at' => "2025-05-15 15:00:00",
+             'starts_at' => now()->addDay(1)->toDateTimeString(),
              '_token' => csrf_token()
          ]);
 
@@ -79,7 +79,7 @@ test('creating and updating task and verify status (must be 201 for create and 2
                  'title' => 'Create API Rest',
                  'description' => 'Create API Rest for main project',
                  'warn_me' => true,
-                 'starts_at' => "2025-05-15 15:00:00"
+                 'starts_at' => now()->addDay(1)->toDateTimeString()
              ],
              'message' => 'Task created with success!'
          ]);
@@ -129,7 +129,7 @@ test('try to update task with wrong ID and verify status (must be 500) and messa
             'title' => 'Update Without Permission API Rest',
             'description' => 'Update Without Permission API Rest for main project',
             'warn_me' => true,
-            'starts_at' => "2025-05-16 13:00:00",
+            'starts_at' => now()->addDay(2)->toDateTimeString(),
             '_token' => csrf_token()
         ]);
 
@@ -151,7 +151,7 @@ test('deleting tasks and verify status (must be 200) and message response', func
              'title' => 'Create API Rest',
              'description' => 'Create API Rest for main project',
              'warn_me' => true,
-             'starts_at' => "2025-05-15 15:00:00",
+             'starts_at' => now()->addDay(1)->toDateTimeString(),
              '_token' => csrf_token()
          ]);
 
@@ -163,7 +163,7 @@ test('deleting tasks and verify status (must be 200) and message response', func
                  'title' => 'Create API Rest',
                  'description' => 'Create API Rest for main project',
                  'warn_me' => true,
-                 'starts_at' => "2025-05-15 15:00:00"
+                 'starts_at' => now()->addDay(1)->toDateTimeString()
              ],
              'message' => 'Task created with success!'
          ]);
