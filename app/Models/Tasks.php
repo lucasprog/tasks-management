@@ -11,6 +11,13 @@ class Tasks extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'warn_me',
+        'starts_at',
+    ];
+
     public function lists() {
         return $this->hasMany(Lists::class);
     }
