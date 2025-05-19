@@ -80,8 +80,17 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/www/.bashrc && \
 # Set the working directory
 WORKDIR /var/www
 
-COPY .env.example .env
-COPY ./setup.sh ./setup.sh
+# COPY --chown=${UID}:${GID} .env.example .env
+# COPY --chown=${UID}:${GID} ./setup.sh ./setup.sh
+
+# RUN chmod 755 /var/www/setup.sh
+
+# COPY --chown=${UID}:${GID} ./composer.json ./composer.json
+
+# RUN --chown=${UID}:${GID} ./composer.json 
+# RUN --chown=${UID}:${GID} ./composer.lock 
+
+# RUN composer install
 
 # Override the entrypoint to avoid the default php entrypoint
 ENTRYPOINT []
