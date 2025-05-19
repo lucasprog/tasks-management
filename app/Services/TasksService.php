@@ -14,18 +14,19 @@ class TasksService {
         $tasks = [];
 
         if( isset($params['id']) ){
-            return auth()->user()->tasks()->where('id',$params['id'])->with('lists:id,item,done')->first();
+            return auth()->user()->tasks()->where('id',$params['id'])->with('lists')->first();
         }
 
         if( isset($params['term']) ){
             $tasks = auth()->user()->tasks()
                 ->where('title','like', "%{$params['term']}%")
-                ->orWhere('description','like', "%{$params['term']}%")
-                ->with('lists:id,item,done')
+                ->where('description','like', "%{$params['term']}%")
+                ->with('lists')
+                ->orderBy('id','desc')
                 ->paginate($perPage);    
+        }else{
+            $tasks = auth()->user()->tasks()->with('lists')->orderBy('id','desc')->paginate($perPage);
         }
-
-        $tasks = auth()->user()->tasks()->with('lists:id,item,done')->paginate($perPage);
 
         return new TasksCollection($tasks);
     }

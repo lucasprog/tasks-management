@@ -8,6 +8,7 @@ use App\Services\ListsService;
 
 use App\Http\Resources\ListsResource;
 use App\Http\Requests\ListRequest;
+use App\Http\Requests\ListGroupRequest;
 
 
 class ListsController extends Controller
@@ -25,19 +26,40 @@ class ListsController extends Controller
 
     }
 
+    public function storeGroupList(int $taskId, ListGroupRequest $request){
+
+        try{
+
+            $postData = $request->all();
+
+            $resultStore = $this->listsService->create($taskId, $postData);
+
+            return response()->json([
+                'data' => $resultStore,
+                'message' => 'Group List created with success!'
+            ],201);
+
+        }catch(\Exception $e){
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
     public function store(int $taskId, ListRequest $request){
 
         try{
 
             $postData = $request->all();
             $resultStore = $this->listsService->create($taskId, $postData);
-
+          
             if( !$resultStore ){
                 throw new \ErrorException('Failed to create List');
             }
 
             return response()->json([
-                'data' => new ListsResource($resultStore),
+                'data' => $resultStore,
                 'message' => 'List created with success!'
             ],201);
 

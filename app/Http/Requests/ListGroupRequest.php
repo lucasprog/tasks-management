@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListRequest extends FormRequest
+class ListGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class ListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item' => 'required',
-            'done' => ['required','boolean']
+            [
+                'item' => 'required',
+                'done' => ['required','boolean']
+            ]
         ];
     }
 }

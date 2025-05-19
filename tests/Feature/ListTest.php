@@ -15,7 +15,7 @@ beforeEach(function () {
     $this->user2 = User::factory()->create();
     $this->csrf_token = csrf_token();
     $response = $this->actingAs($this->user)
-        ->post('/tasks', [
+        ->post('/api/tasks', [
             'title' => 'Task With List',
             'description' => 'This task has many items, or not',
             'warn_me' => true,
@@ -31,7 +31,7 @@ test('getting item list of task, and verify status (must be 200) and data respon
     
     $response = $this
         ->actingAs($this->user)
-        ->get("/lists/{$this->task['data']['id']}");
+        ->get("/api/lists/{$this->task['data']['id']}");
     
     $response
          ->assertStatus(200);
@@ -42,10 +42,9 @@ test('creating item list for task, and verify status (must be 201) and data resp
     
     $response = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -61,14 +60,57 @@ test('creating item list for task, and verify status (must be 201) and data resp
     
 });
 
+test('creating item list group for task, and verify status (must be 201) and data response', function () {
+    
+    $response = $this
+        ->actingAs($this->user)
+        ->post("/api/lists/group/{$this->task['data']['id']}", [
+            [
+                'item' => 'Item 1',
+                'done' => false,
+            ],
+            [
+                'item' => 'Item 2',
+                'done' => false,
+            ],
+            [
+                'item' => 'Item 3',
+                'done' => false,
+            ]
+        ]);
+    
+    $response
+         ->assertStatus(201)
+         ->assertJson([
+                'data' => [
+                    [
+                        'id' => 1,
+                        'item' => 'Item 1',
+                        'done' => false,
+                    ],
+                    [
+                        'id' => 2,
+                        'item' => 'Item 2',
+                        'done' => false,
+                    ],
+                    [
+                        'id' => 3,
+                        'item' => 'Item 3',
+                        'done' => false,
+                    ]
+                ],
+                "message" => "Group List created with success!"
+         ]);
+    
+});
+
 test('try to create item list for task without task id, and verify status (must be 404)', function () {
     
     $response = $this
         ->actingAs($this->user)
-        ->post("/lists", [
+        ->post("/api/lists", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -80,10 +122,9 @@ test('try to create item list for task with task id that not belongs to user, an
     
     $response = $this
         ->actingAs($this->user2)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -95,21 +136,19 @@ test('updating item list for task, and verify status (must be 200) and data resp
     
     $responseCreation = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $listCreated = $responseCreation->json();
 
     $response = $this
         ->actingAs($this->user)
-        ->put("/lists/{$this->task['data']['id']}", [
+        ->put("/api/lists/{$this->task['data']['id']}", [
             'id' => $listCreated['data']['id'],
             'item' => 'Item 001',
             'done' => true,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -124,21 +163,19 @@ test('try to update item list for task, without task id and verify status (must 
     
     $responseCreation = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $listCreated = $responseCreation->json();
 
     $response = $this
         ->actingAs($this->user)
-        ->put("/lists", [
+        ->put("/api/lists", [
             'id' => $listCreated['data']['id'],
             'item' => 'Item 001',
             'done' => true,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -150,21 +187,19 @@ test('try to update item list for task that task id not belongs to user and veri
     
     $responseCreation = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $listCreated = $responseCreation->json();
 
     $response = $this
         ->actingAs($this->user2)
-        ->put("/lists/{$this->task['data']['id']}", [
+        ->put("/api/lists/{$this->task['data']['id']}", [
             'id' => $listCreated['data']['id'],
             'item' => 'Item 001',
             'done' => true,
-            '_token' => $this->csrf_token
         ]);
     
     $response
@@ -176,17 +211,16 @@ test('try to delete item list of task and verify status (must be 200)', function
     
     $responseCreation = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $listCreated = $responseCreation->json();
 
     $response = $this
         ->actingAs($this->user)
-        ->delete("/lists/{$this->task['data']['id']}/{$listCreated['data']['id']}");
+        ->delete("/api/lists/{$this->task['data']['id']}/{$listCreated['data']['id']}");
     
     $response
          ->assertStatus(200)
@@ -200,17 +234,16 @@ test('try to delete item list of task that task id not belongs to user and verif
     
     $responseCreation = $this
         ->actingAs($this->user)
-        ->post("/lists/{$this->task['data']['id']}", [
+        ->post("/api/lists/{$this->task['data']['id']}", [
             'item' => 'Item 1',
             'done' => false,
-            '_token' => $this->csrf_token
         ]);
     
     $listCreated = $responseCreation->json();
 
     $response = $this
         ->actingAs($this->user2)
-        ->delete("/lists/{$this->task['data']['id']}/{$listCreated['data']['id']}");
+        ->delete("/api/lists/{$this->task['data']['id']}/{$listCreated['data']['id']}");
     
     $response
          ->assertStatus(404)

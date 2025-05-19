@@ -8,11 +8,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import { createPinia } from 'pinia'
 
-
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const pinia = createPinia()
-
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

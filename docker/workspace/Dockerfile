@@ -83,5 +83,7 @@ WORKDIR /var/www
 # Override the entrypoint to avoid the default php entrypoint
 ENTRYPOINT []
 
+EXPOSE 6001
+
 # Default command to keep the container running
 CMD ["bash"]

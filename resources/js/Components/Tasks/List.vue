@@ -1,7 +1,9 @@
 <script setup>
-    import { computed, useTemplateRef} from 'vue';
+    import { computed, ref, onMounted } from 'vue';
     import { useTasksStore } from '@/Stores/useTasksStore';
     import TaskCard from '@/Components/Tasks/Card.vue';
+    import Modal from '@/Components/Modal.vue'
+    import TaskViewEditForm from '@/Components/Tasks/ViewEditForm.vue';
 
     const tasksStore = useTasksStore();
 
@@ -13,18 +15,19 @@
         tasksStore.nextPage();
         window.scrollTo(0, document.body.scrollHeight);
     }
+
     
 </script>
 <template>
-    <div class="flex py-8 items-center justify-center flex-col gap-4">
-        <div class="flex flex-1 gap-4 flex-wrap items-start justify-start">
+    <div class="flex py-8 items-center justify-center flex-col gap-4 w-full">
+        <div class="flex flex-1 gap-4 flex-wrap items-start justify-start w-full">
             <template v-for="(task, key) in tasksToList" :key="key">
-                <div class="flex-shrink flex-grow basis-[25%] max-w-[400px] w-full">
+                <div class="flex-shrink flex-grow basis-[25%] w-1/3">
                     <TaskCard :task="task" />
                 </div>
             </template>
         </div>
-        <div v-if="tasksStore.loadingRequest" class="animate-pulse flex flex-1 gap-4 flex-wrap items-start justify-start w-full">
+        <div v-if="tasksStore.loadingRequestList" class="animate-pulse flex flex-1 gap-4 flex-wrap items-start justify-start w-full">
             <template v-for="i in tasksStore.paginate.per_page">
                 <div class="h-80 bg-gray-700 flex-shrink flex-grow basis-[25%] max-w-[400px] w-full"></div>
             </template>            
@@ -35,5 +38,9 @@
                 See More
             </button>
         </template>
+
+        <Modal :show="tasksStore.modalFormUpdate.show" :closeable="true" @close="tasksStore.modalFormUpdate.show = false">            
+            <TaskViewEditForm />
+        </Modal>
     </div>
 </template>

@@ -22,11 +22,32 @@ class ListsService {
 
     public function create(int $taskId, Array $dataToCreate){
            
-        $dataToCreate['tasks_id'] = $taskId;
+        $listCreated = [];
 
-        $listCreated = Lists::create($dataToCreate);
+        if( is_array_of_arrays($dataToCreate)){
+            
+            $dataArrayToCreate = array_map(function($item) use ($taskId){
+                $item['tasks_id'] = $taskId;
+                return $item;
+            }, $dataToCreate);
+           
 
-        return new ListsResource($listCreated);
+            foreach($dataArrayToCreate as $dC){
+                $created = Lists::create($dC);
+
+                if( $created ){
+                    $listCreated[] = new ListsResource($created);
+                }
+            }
+
+            return $listCreated;
+
+        }else{
+            
+            $dataToCreate['tasks_id'] = $taskId;
+            $listCreated = Lists::create($dataToCreate);
+            return new ListsResource($listCreated);
+        }
 
     }
 

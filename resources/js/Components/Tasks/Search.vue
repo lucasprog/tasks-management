@@ -2,8 +2,18 @@
 
     import { ref } from 'vue';
 
+    import { useTasksStore } from '@/Stores/useTasksStore';
+
+    const tasksStore = useTasksStore();
+
+
     const inputSearch = ref();
-    const search = () => {}
+    const search = () => {
+        tasksStore.term = inputSearch;
+        tasksStore.clearTasks();
+        tasksStore.restartPagination();
+        tasksStore.requestTasks();
+    }
 
 </script>
 <template>

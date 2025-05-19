@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TasksController;
-use App\Http\Controllers\ListsController;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -29,23 +28,12 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('tasks', [TasksController::class,'index'])->name('tasks.index');
-
-    Route::get('tasks/get', [TasksController::class,'get'])->name('tasks.get');
-    Route::post('tasks', [TasksController::class,'store'])->name('tasks.store');
-    Route::put('tasks', [TasksController::class,'update'])->name('tasks.update');
-    Route::delete('tasks/{id}', [TasksController::class,'delete'])->name('tasks.delete');
-
-    Route::middleware('verify_task_owner')->group(function(){
-        Route::get('lists/{taskId}', [ListsController::class,'index'])->name('lists.index');
-        Route::post('lists/{taskId}', [ListsController::class,'store'])->name('lists.store');
-        Route::put('lists/{taskId}', [ListsController::class,'update'])->name('lists.update');
-        Route::delete('lists/{taskId}/{listId}', [ListsController::class,'delete'])->name('lists.delete');
-    });
+   Route::get('tasks', [TasksController::class,'index'])->name('tasks.index');
 
 });
 

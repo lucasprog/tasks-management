@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 test('try to get tasks without permission and verify if it redirect (status 302) denying access', function () {
-    $response = $this->get('/tasks/get');
+    $response = $this->get('/api/tasks');
     $response
     ->assertStatus(302);
 });
@@ -27,7 +27,7 @@ test('creating and getting task and verify status (must be 200) and data respons
 
     $response = $this
         ->actingAs($user)
-        ->post('/tasks', [
+        ->post('/api/tasks', [
             'title' => 'Create API Rest',
             'description' => 'Create API Rest for main project',
             'warn_me' => true,
@@ -37,7 +37,7 @@ test('creating and getting task and verify status (must be 200) and data respons
         
     $responseGot = $this
         ->actingAs($user)
-        ->get('/tasks/get');
+        ->get('/api/tasks');
 
     $responseGot
          ->assertStatus(200)
@@ -47,7 +47,7 @@ test('creating and getting task and verify status (must be 200) and data respons
                     'id' => 1,
                     'title' => 'Create API Rest',
                     'description' => 'Create API Rest for main project',
-                    'warn_me' => true,
+                    'warn_me' => 1,
                     'starts_at' => now()->addDay(1)->toDateTimeString()
                 ],
             ]
@@ -63,7 +63,7 @@ test('creating and updating task and verify status (must be 201 for create and 2
 
      $responseCreated = $this
          ->actingAs($user)
-         ->post('/tasks', [
+         ->post('/api/tasks', [
              'title' => 'Create API Rest',
              'description' => 'Create API Rest for main project',
              'warn_me' => true,
@@ -86,7 +86,7 @@ test('creating and updating task and verify status (must be 201 for create and 2
 
     $responseUpdated = $this
         ->actingAs($user)
-        ->put('/tasks', [
+        ->put('/api/tasks', [
             'id' => 1,
             'title' => 'Update API Rest',
             'description' => 'Update API Rest for main project',
@@ -102,7 +102,7 @@ test('creating and updating task and verify status (must be 201 for create and 2
         ]);
 
     $responseUpdatedVerify = $this->actingAs($user)
-        ->get('/tasks/get?id=1');
+        ->get('/api/tasks?id=1');
     
     $responseUpdatedVerify
         ->assertStatus(200)
@@ -124,7 +124,7 @@ test('try to update task with wrong ID and verify status (must be 500) and messa
 
     $responseUpdated = $this
         ->actingAs($user)
-        ->put('/tasks', [
+        ->put('/api/tasks', [
             'id' => 1,
             'title' => 'Update Without Permission API Rest',
             'description' => 'Update Without Permission API Rest for main project',
@@ -147,7 +147,7 @@ test('deleting tasks and verify status (must be 200) and message response', func
 
      $responseCreated = $this
          ->actingAs($user)
-         ->post('/tasks', [
+         ->post('/api/tasks', [
              'title' => 'Create API Rest',
              'description' => 'Create API Rest for main project',
              'warn_me' => true,
@@ -170,7 +170,7 @@ test('deleting tasks and verify status (must be 200) and message response', func
 
     $responseUpdated = $this
         ->actingAs($user)
-        ->delete('/tasks/1');
+        ->delete('/api/tasks/1');
 
     $responseUpdated
         ->assertStatus(200)
@@ -185,7 +185,7 @@ test('deleting tasks with wrong ID and verify status (must be 500) and message r
 
     $responseUpdated = $this
         ->actingAs($user)
-        ->delete('/tasks/3');
+        ->delete('/api/tasks/3');
 
     $responseUpdated
         ->assertStatus(500)
